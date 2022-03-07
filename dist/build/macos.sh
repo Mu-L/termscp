@@ -58,6 +58,7 @@ if [ -z "$1" ]; then
 fi
 
 VERSION=$1
+export BUILD_ROOT=$(pwd)/../../
 
 set -e # Don't fail
 
@@ -75,12 +76,13 @@ cargo build --release
 X86_64_HASH=$(make_pkg "x86_64" $VERSION)
 
 # set openssl dir
-export OPENSSL_DIR=$(pwd)/build/macos/openssl/
+export OPENSSL_DIR=$BUILD_ROOT/dist/build/macos/openssl/
 export OPENSSL_STATIC=1
 export OPENSSL_LIB_DIR=${OPENSSL_DIR}/lib/
 export OPENSSL_INCLUDE_DIR=${OPENSSL_DIR}/include/
 # build openssl
 build_openssl_arm64
+cd $BUILD_ROOT
 # Build ARM64 pkg
 cargo build --release --target aarch64-apple-darwin
 # Make pkg
